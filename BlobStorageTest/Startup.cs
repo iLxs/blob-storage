@@ -1,5 +1,7 @@
 using Azure.Storage.Blobs;
+using Azure.Storage.Queues;
 using BlobStorageTest.Services.BlobStorage;
+using BlobStorageTest.Services.QueueStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,6 +38,13 @@ namespace BlobStorageTest
 
             // Blob service
             services.AddScoped<IBlobStorageService, BlobStorageService>();
+
+
+            services.AddScoped(_ => {
+                return new QueueServiceClient(Configuration.GetConnectionString("BlobConnectionString"));
+            });
+
+            services.AddScoped<IQueueStorageService, QueueStorageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

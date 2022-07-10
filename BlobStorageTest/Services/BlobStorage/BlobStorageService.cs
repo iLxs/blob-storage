@@ -9,27 +9,27 @@ namespace BlobStorageTest.Services.BlobStorage
     public class BlobStorageService : IBlobStorageService
     {
         private readonly BlobServiceClient _blobServiceClient;
-        private string _blobContainerName;
+        private readonly string _containerName;
 
         public BlobStorageService(BlobServiceClient blobServiceClient, IConfiguration configuration)
         {
             _blobServiceClient = blobServiceClient;
-            _blobContainerName = configuration.GetValue<string>("BlobContainerName");
+            _containerName = configuration.GetValue<string>("BlobContainerName");
 
-            InitializeBlobContainerAsync();
+            _ = InitializeBlobContainerAsync();
         }
 
         private async Task InitializeBlobContainerAsync()
         {
-            var container = _blobServiceClient.GetBlobContainerClient(_blobContainerName);
-            var createResponse = await container.CreateIfNotExistsAsync();
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+            var createResponse = await containerClient.CreateIfNotExistsAsync();
             if (createResponse != null && createResponse.GetRawResponse().Status == 201)
-                await container.SetAccessPolicyAsync(PublicAccessType.Blob);
+                await containerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
         }
 
         public async Task<string> UploadAsync(Stream fileStream, string fileName, string contentType)
         {
-            var container = _blobServiceClient.GetBlobContainerClient(_blobContainerName);
+            var container = _blobServiceClient.GetBlobContainerClient(_containerName);
             var blob = container.GetBlobClient(fileName);
             await blob.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots);
             await blob.UploadAsync(fileStream, new BlobHttpHeaders { ContentType = contentType });
@@ -38,7 +38,7 @@ namespace BlobStorageTest.Services.BlobStorage
 
         public async Task<byte[]> DownloadAsync(string imageName)
         {
-            var blobContainer = _blobServiceClient.GetBlobContainerClient(_blobContainerName);
+            var blobContainer = _blobServiceClient.GetBlobContainerClient(_containerName);
 
             var blobClient = blobContainer.GetBlobClient(imageName);
             var downloadContent = await blobClient.DownloadAsync();
@@ -51,7 +51,7 @@ namespace BlobStorageTest.Services.BlobStorage
 
         public Task<bool> FileExists(string imageName)
         {
-            var blobContainer = _blobServiceClient.GetBlobContainerClient(_blobContainerName);
+            var blobContainer = _blobServiceClient.GetBlobContainerClient(_containerName);
             var blobClient = blobContainer.GetBlobClient(imageName);
 
             bool result = false;

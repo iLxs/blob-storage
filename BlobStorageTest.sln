@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlobStorageTest", "BlobStorageTest\BlobStorageTest.csproj", "{0262201E-F5D8-4E9A-988A-2437256BF058}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlobStorageTest", "BlobStorageTest\BlobStorageTest.csproj", "{0262201E-F5D8-4E9A-988A-2437256BF058}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueJob", "QueueJob\QueueJob.csproj", "{FE33A83B-CD4C-4C24-8D2E-D4C39BBB1700}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0262201E-F5D8-4E9A-988A-2437256BF058}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0262201E-F5D8-4E9A-988A-2437256BF058}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0262201E-F5D8-4E9A-988A-2437256BF058}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE33A83B-CD4C-4C24-8D2E-D4C39BBB1700}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE33A83B-CD4C-4C24-8D2E-D4C39BBB1700}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE33A83B-CD4C-4C24-8D2E-D4C39BBB1700}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE33A83B-CD4C-4C24-8D2E-D4C39BBB1700}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

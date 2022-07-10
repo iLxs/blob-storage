@@ -1,4 +1,5 @@
 ﻿using BlobStorageTest.Services.BlobStorage;
+using BlobStorageTest.Services.QueueStorage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,11 +14,13 @@ namespace BlobStorageTest.Controllers
     [Route("api/blob")]
     public class BlobTestController : ControllerBase
     {
-        private IBlobStorageService _blobStorageService;
+        private readonly IBlobStorageService _blobStorageService;
+        private readonly IQueueStorageService _queueStorageService;
 
-        public BlobTestController(IBlobStorageService blobStorageService)
+        public BlobTestController(IBlobStorageService blobStorageService, IQueueStorageService queueStorageService)
         {
             _blobStorageService = blobStorageService;
+            _queueStorageService = queueStorageService;
         }
 
         [HttpGet]
@@ -34,10 +37,14 @@ namespace BlobStorageTest.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload([FromForm] IFormFile file)
         {
-            if (file != null)
-            {
-                await _blobStorageService.UploadAsync(file.OpenReadStream(), file.FileName, file.ContentType);
-            }
+            if (file == null || file.ContentType != "application/pdf")
+                return BadRequest("Only PDFs are allowed");
+
+            await _blobStorageService.UploadAsync(file.OpenReadStream(), file.FileName, file.ContentType);
+            var emailToSend = "alexis.ortiz.2096@gmail.com";
+            var name = "Alexis Ortiz";
+            await _queueStorageService.SendMessageToQueue(file.FileName + "@@@" + emailToSend + "@@@" + name);
+
             return Ok();
         }
 
